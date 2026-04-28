@@ -1,8 +1,13 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// API Key provided by the user instructions
-const API_KEY = 'AIzaSyCMmrIyvtapaNmAYsHsQsbSVUQeYrLkl4U';
-const genAI = new GoogleGenerativeAI(API_KEY);
+// API Key should be injected via environment variables to prevent leaking
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
+if (!API_KEY) {
+  console.error("Missing VITE_GEMINI_API_KEY environment variable. Please add it to your .env file or Vercel dashboard.");
+}
+
+const genAI = new GoogleGenerativeAI(API_KEY || 'MISSING_KEY');
 
 export async function generateMCQTest(prompt, numQuestions = 25) {
   try {
